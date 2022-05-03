@@ -114,3 +114,22 @@ plugins: [
   })
 ]
 ```
+
+## 4 - 使用 DevServer
+
+### **第一步**安装`webpack-dev-server`
+
+```deep
+npm i -D webpack-dev-server
+```
+
+### **第二步**配置 package.json
+
+1. 配置热替换 `--hot`
+2. 配置 source map `--devtool source-map`
+
+```deep
+"scripts": {
+  "start": "webpack-dev-server --config webpack.config.js --hot --devtool source-map"
+},
+```
