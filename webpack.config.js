@@ -7,7 +7,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   mode: "development",
   // 入口文件
-  entry: "./main.js",
+  entry: "./src/main.js",
+  devServer: {
+    open: true
+  },
   output: {
     // 把所有依赖的模块合并输出到一个 bundle.js 文件
     filename: "bundle.js",
@@ -16,6 +19,26 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.js$/, // enforce 默认为 normal 普通loader
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  useBuiltIns: "usage",
+                  corejs: 2
+                }
+              ]
+            ], // 把es6转成es5
+            plugins: ["@babel/plugin-transform-runtime"] //作用？
+          }
+        },
+        include: path.resolve(__dirname, "src"),
+        exclude: /node_modules/
+      },
       {
         // 用正则去匹配要用该 loader 转换的 CSS 文件
         test: /\.css$/,
@@ -31,5 +54,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: `[name]_[contenthash:8].css`
     })
-  ]
+  ],
+  resolve: {
+    extensions: [".js"]
+  },
+  devtool: "eval-source-map"
 };

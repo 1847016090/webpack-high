@@ -1,6 +1,7 @@
 # 1 - 基于 深入浅出 Webpack 学习
 
 1. [深入浅出 Webpack](http://webpack.wuhaolin.cn/)
+2. [Webpack5 最佳实践](https://juejin.cn/post/7061165571252944926)
 
 ## 1. webpack 安装和使用
 
@@ -146,3 +147,45 @@ npm i -D webpack-dev-server
 - **Output**：输出结果，在 Webpack 经过一系列处理并得出最终想要的代码后输出结果。
 
 Webpack 启动后会从 Entry 里配置的 Module 开始递归解析 Entry 依赖的所有 Module。 每找到一个 Module， 就会根据配置的 Loader 去找出对应的转换规则，对 Module 进行转换后，再解析出当前 Module 依赖的 Module。 这些模块会以 Entry 为单位进行分组，一个 Entry 和其所有依赖的 Module 被分到一个组也就是一个 Chunk。最后 Webpack 会把所有 Chunk 转换成文件输出。 在整个流程中 Webpack 会在恰当的时机执行 Plugin 里定义的逻辑。
+
+## 6 - 使用 ES6 + 语法
+
+### **第一步**安装依赖
+
+1. `babel-loader`,Webpack 和 babel 通信的桥梁，目的是将转化 ES6+代码到 ES5
+2. `@babel/preset-env`,包含了大部分 ES6 转化成 ES5 的规则
+3. `@babel/polyfill`, 解析更加高级的语法，比如 Promise 等
+4. `@babel/plugin-transform-runtime`，提供辅助函数的作用，例如帮助引入公共的方法，一般和`@babel/runtime`一起使用
+   **安装**
+
+```
+npm i @babel/core babel-loader @babel/preset-env @babel/plugin-transform-runtime -@babel/polyfill -D
+```
+
+**配置**
+
+```
+rules: [
+  {
+    test: /\.js$/, // enforce 默认为 normal 普通loader
+    use: {
+      loader: "babel-loader",
+      options: {
+        presets: [
+          [
+            "@babel/preset-env", // 把es6转成es5
+            {
+              // 按需引入polyfiil里面的高级语法解析规则
+              useBuiltIns: "usage",
+              corejs: 2
+            }
+          ]
+        ],
+        plugins: ["@babel/plugin-transform-runtime"] //作用？
+      }
+    },
+    include: path.resolve(__dirname, "src"),
+    exclude: /node_modules/
+  }
+]
+```
