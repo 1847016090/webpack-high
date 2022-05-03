@@ -51,3 +51,25 @@ module.exports = {
 ```
 
 ## 使用 Loader 加载 css
+
+### **第一步**安装`style-loader`,`css-loader`
+
+```
+npm i -D style-loader css-loader
+```
+
+### **第二步**配置 webpack.config.js
+
+```
+// module => rules 新增加载css的loader规则
+
+module: {
+    rules: [
+      {
+        // 用正则去匹配要用该 loader 转换的 CSS 文件
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      }
+    ]
+  }
+```
