@@ -156,15 +156,16 @@ Webpack 启动后会从 Entry 里配置的 Module 开始递归解析 Entry 依�
 2. `@babel/preset-env`,包含了大部分 ES6 转化成 ES5 的规则
 3. `@babel/polyfill`, 解析更加高级的语法，比如 Promise 等
 4. `@babel/plugin-transform-runtime`，提供辅助函数的作用，例如帮助引入公共的方法，一般和`@babel/runtime`一起使用
-   **安装**
 
-```
+#### 安装
+
+```deep
 npm i @babel/core babel-loader @babel/preset-env @babel/plugin-transform-runtime -@babel/polyfill -D
 ```
 
-**配置**
+#### 配置
 
-```
+```deep
 rules: [
   {
     test: /\.js$/, // enforce 默认为 normal 普通loader
@@ -188,4 +189,56 @@ rules: [
     exclude: /node_modules/
   }
 ]
+```
+
+## 7 - 使用 Typescript
+
+### **第一步**安装`typescript`和`ts-loader`
+
+```deep
+cnpm i -D typescript ts-loader
+```
+
+### **第二步**新建`tsconfig.json`
+
+配置 tsconfig.json
+
+```deep
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true
+  }
+}
+```
+
+### **第三步**配置 webpack.config.js
+
+```deep
+{
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js", ".json"]
+  },
+}
+```
+
+### **第四步**新建 main.ts，并且修改`webapck.config.js`文件入口路径以及文件名就 OK 了
+
+```deep
+{
+  entry: "./src/main.ts",
+}
 ```

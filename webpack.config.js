@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   mode: "development",
   // 入口文件
-  entry: "./src/main.js",
+  entry: "./src/main.ts",
   devServer: {
     open: true
   },
@@ -19,6 +19,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/
+      },
       {
         test: /\.js$/, // enforce 默认为 normal 普通loader
         use: {
@@ -56,7 +61,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".js"]
+    extensions: [".tsx", ".ts", ".js", ".json"]
   },
   devtool: "eval-source-map"
 };
