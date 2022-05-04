@@ -195,6 +195,8 @@ rules: [
 
 ### **第一步**安装`typescript`和`ts-loader`
 
+**查看你安装的第三方的库所需要的类型**, [查询链接](https://www.typescriptlang.org/dt/search?search=)
+
 ```deep
 cnpm i -D typescript ts-loader
 ```
