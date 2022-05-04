@@ -275,3 +275,44 @@ cnpm i sass-loader node-sass -D
 ### 第三步 编写`testSass.scss`文件并且在`main.ts`中引入
 
 ### 执行`yarn build`
+
+## 9 - 使用 Postcss
+
+### 第一步 安装依赖
+
+- `postcss-loader`依赖`postcss`
+- `autoprefixer`可以为 css 属性添加前缀，兼容不同的浏览器
+
+```deep
+cnpm i -D postcss postcss-loader autoprefixer
+```
+
+### 第二步 根目录 创建 `postcss.config.js`并且引入`autoprefixer`
+
+> 这里也可以用`postcss-preset-env`,它会自动添加所需的`polyfill`，同时也可以自动帮助我们添加`autoprefixer`
+
+```deep
+module.exports = {
+  plugins: [require("autoprefixer")]
+};
+
+```
+
+### 第三步 配置 `webpack.config.js`
+
+```deep
+{
+  modules: {
+    rules: [{
+      test: /\.scss$/,
+      use: [
+        MiniCssExtractPlugin.loader,
+        "css-loader",
+        // 等css预处理器将scss样式转化为css样式再给其添加前缀兼容浏览器
+        "postcss-loader",
+        "sass-loader"
+      ]
+    }]
+  }
+}
+```
