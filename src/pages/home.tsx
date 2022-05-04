@@ -12,7 +12,12 @@ const Home = () => {
       clearTimeout(timer);
     };
   }, []);
-  return <div>{text}</div>;
+  return (
+    <div>
+      {text}
+      <img src={"../assets/images/feeds.png"} />
+    </div>
+  );
 };
 
 export default Home;
