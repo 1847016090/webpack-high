@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   mode: "development",
   // 入口文件
-  entry: "./src/main.ts",
+  entry: "./src/index.tsx",
   devServer: {
     open: true
   },
@@ -26,21 +26,7 @@ module.exports = {
       },
       {
         test: /\.js$/, // enforce 默认为 normal 普通loader
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  useBuiltIns: "usage",
-                  corejs: 2
-                }
-              ]
-            ], // 把es6转成es5
-            plugins: ["@babel/plugin-transform-runtime"] //作用？
-          }
-        },
+        use: ["babel-loader"],
         include: path.resolve(__dirname, "src"),
         exclude: /node_modules/
       },

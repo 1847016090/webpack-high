@@ -318,3 +318,68 @@ module.exports = {
   }
 }
 ```
+
+## 10-使用 React 框架
+
+###  第一步 安装依赖
+
+- 配置 babel 转译
+- 安装 `react` `react-dom`
+
+```deep
+cnpm i -D @babel/preset-react
+
+cnpm i -D react react-dom
+```
+
+### 第二步 配置`.babelrc`，引入`preset-react`
+
+```deep
+{
+  "presets": [
+    "@babel/preset-react"
+  ]
+}
+```
+
+### 第三步 在新增`index.tsx` 并且新增以下代码
+
+```deep
+import * as React from "react";
+import * as ReactDom from "react-dom";
+
+const App = (): React.ReactElement => {
+  const a: string = "1111111dsafdfsfa111";
+  return <div>{a}</div>;
+};
+
+ReactDom.render(<App />, document.getElementById("app"));
+```
+
+### 第四步 修改`webpack.config.js` 的入口`entry`为`index.tsx`并且打包编译成功
+
+```deep
+{
+  entry: './src/index.tsx'
+}
+```
+
+### 第五步 引入 React 对应的类型
+
+#### 1. 安装`react`,`react-dom`的类型
+
+```deep
+cnpm i @types/react @types/react-dom -D
+```
+
+#### 2. 配置`tsconfig.json`
+
+```deep
+{
+  "compilerOptions": {
+    "jsx": "react",
+  }
+}
+```
+
+#### 然后就 OK 了
