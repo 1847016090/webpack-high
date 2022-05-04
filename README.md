@@ -242,3 +242,36 @@ cnpm i -D typescript ts-loader
   entry: "./src/main.ts",
 }
 ```
+
+## 8-使用 Sass
+
+### 第一步 安装依赖 `node-sass`和`sass-loader`
+
+#### 具体的处理流程
+
+- 通过 sass-loader 把 SCSS 源码转换为 CSS 代码，再把 CSS 代码交给 css-loader 去处理。
+- css-loader 会找出 CSS 代码中的 @import 和 url() 这样的导入语句，告诉 Webpack 依赖这些资源。同时还支持 CSS Modules、压缩 CSS 等功能。处理完后再把结果交给 style-loader 去处理。
+- style-loader 会把 CSS 代码转换成字符串后，注入到 JavaScript 代码中去，通过 JavaScript 去给 DOM 增加样式。
+
+```deep
+cnpm i sass-loader node-sass -D
+```
+
+### 第二步 配置`webpack.config.js`
+
+```deep
+{
+  modules: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+      }
+    ]
+  }
+}
+```
+
+### 第三步 编写`testSass.scss`文件并且在`main.ts`中引入
+
+### 执行`yarn build`
