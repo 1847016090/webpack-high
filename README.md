@@ -383,3 +383,38 @@ cnpm i @types/react @types/react-dom -D
 ```
 
 #### 然后就 OK 了
+
+## 11-使用图片
+
+### 第一步 配置`webpack.config.js`
+
+- 设置 type 为`asset`
+- 当图片当于 8kb，会将图片资源拷贝到 dist/img 下面并且以哈希命名
+- 当图片小于 8kb，会将图片转化为 base64 注入到代码里面
+
+```
+// webpack 5.0不需要使用 url-loader, file-loader, raw-loader，直接使用asset来配置
+
+{
+  test: /\.(jpe?g|png|svg|gif)/i,
+  type: "asset",
+  generator: {
+    filename: "img/[hash][ext][query]" // 局部指定输出位置
+  },
+  parser: {
+    dataUrlCondition: {
+      maxSize: 8 * 1024 // 限制于 8kb
+    }
+  }
+}
+```
+
+### 第二步 在`scss`文件中引入背景图片
+
+```
+#app {
+  background: url(./assets/img/feeds.png);
+}
+```
+
+### 执行 `yarn build` 查看浏览器显示的图片路径

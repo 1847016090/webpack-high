@@ -45,28 +45,16 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg)/,
-        use: {
-          loader: "url-loader",
-          options: {
-            outputPath: "images/", // 图片输出的路径
-            limit: 10 * 1024
+        test: /\.(jpe?g|png|svg|gif)/i,
+        type: "asset",
+        generator: {
+          filename: "img/[hash][ext][query]" // 局部指定输出位置
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024 // 限制于 8kb
           }
         }
-      },
-      {
-        test: /\.(eot|woff2?|ttf|svg)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              name: "[name]-[hash:5].min.[ext]",
-              limit: 5000, // fonts file size <= 5KB, use 'base64'; else, output svg file
-              publicPath: "fonts/",
-              outputPath: "fonts/"
-            }
-          }
-        ]
       }
     ]
   },
@@ -76,11 +64,14 @@ module.exports = {
       template: "./index.html"
     }),
     new MiniCssExtractPlugin({
-      filename: `[name]_[contenthash:8].css`
+      filename: `css/[name]_[contenthash:8].css`
     })
   ],
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".json"]
+    extensions: [".tsx", ".ts", ".js", ".json"],
+    alias: {
+      "@": path.resolve(__dirname, "./src")
+    }
   },
   devtool: "eval-source-map"
 };
