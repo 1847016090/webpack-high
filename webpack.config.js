@@ -25,18 +25,21 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.js$/, // enforce 默认为 normal 普通loader
-        use: ["babel-loader"],
+        test: /\.js$/, // enforce 默认为 normal 普通 loader
+        use: [
+          "babel-loader",
+          {
+            loader: "eslint-loader",
+            options: {
+              cache: true
+            }
+          }
+        ],
         include: path.resolve(__dirname, "src"),
         exclude: /node_modules/
       },
       {
-        // 用正则去匹配要用该 loader 转换的 CSS 文件
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
-      },
-      {
-        test: /\.scss$/,
+        test: /\.(s?)css$/,
         use: [
           MiniCssExtractPlugin.loader,
           "css-loader",

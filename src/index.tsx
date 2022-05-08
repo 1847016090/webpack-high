@@ -4,7 +4,7 @@ import * as ReactDom from "react-dom";
 import "@/assets/img/feeds.png";
 
 import "./testSass.scss";
-
+const a = 1;
 import Home from "./pages/home";
 
 const App = (): React.ReactElement => {
@@ -16,5 +16,8 @@ const App = (): React.ReactElement => {
     </div>
   );
 };
+
+const aa =
+  "sdafdafdfasfasfsdafsdfasdfsdfasdfasdfasdfasdfasdfasfdasdfasdfasfasdfasaassdafdafdfasfassssdafdafdfasfassdafdafdfasfas";
 
 ReactDom.render(<App />, document.getElementById("app"));

@@ -2,6 +2,8 @@
 
 1. [深入浅出 Webpack](http://webpack.wuhaolin.cn/)
 2. [Webpack5 最佳实践](https://juejin.cn/post/7061165571252944926)
+3. [Webpack 配置核心包的作用](https://juejin.cn/post/6986621723961475103)
+4. [Airbnb 代码风格](https://github.com/airbnb/javascript)
 
 ## 1. webpack 安装和使用
 
@@ -418,3 +420,213 @@ cnpm i @types/react @types/react-dom -D
 ```
 
 ### 执行 `yarn build` 查看浏览器显示的图片路径
+
+## 12-配置 ESlint 代码检查
+
+### 第一步 配置 Eslint 规则
+
+- 创建 `.eslintrc.js`
+- 配置以下的规则
+
+```deep
+module.exports = {
+  globals: {
+    // 脚本在执行期间访问的额外的全局变量。
+    wx: true
+  },
+  env: {
+    // 指定脚本的运行环境。每种环境都有一组特定的预定义全局变量。
+    browser: true,
+    es2021: true
+  },
+  extends: [
+    //继承一个配置文件可以被基础配置中的已启用的规则
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-airbnb-base"
+  ],
+  parser: "@typescript-eslint/parser", // Eslint 默认使用 Espree 作为其解析器，这里我们配置使用@typescript-eslint/parser
+  parserOptions: {
+    //指定解析的ES版本 12 == ES2021
+    ecmaVersion: 12,
+    sourceType: "module" //如果你的代码是 ECMAScript 模块
+  },
+  plugins: ["@typescript-eslint"],
+  rules: {
+    "linebreak-style": 0, // 强制使用一致的换行风格
+    "prefer-promise-reject-errors": 0, // 要求使用 Error 对象作为 Promise 拒绝的原因
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-unused-expressions": 0, // 禁止出现未使用过的表达式
+    "func-names": 0, // 要求或禁止使用命名的 function 表达式
+    "arrow-body-style": 0, // 要求箭头函数体使用大括号
+    "no-async-promise-executor": 0, // 禁止使用异步函数作为 Promise executor
+    "no-param-reassign": 0, // 禁止对 function 的参数进行重新赋值
+    "@typescript-eslint/ban-types": 0,
+    "import/prefer-default-export": 0,
+    "arrow-parens": 0, //要求箭头函数的参数使用圆括号
+    "no-use-before-define": 0, //禁止在变量定义之前使用它们
+    "no-shadow": 0, // 禁止变量声明与外层作用域的变量同名
+    eqeqeq: 0, // 要求使用 === 和 !==
+    "object-curly-newline": ["error", { ObjectPattern: "never" }], // 强制大括号内换行符的一致性
+    "no-console": 0, // 禁用 console
+    semi: ["error", "never"], // 要求或禁止使用分号代替 ASI
+    curly: ["error", "all"], // 强制所有控制语句使用一致的括号风格
+    "no-param-reassign": [
+      // 禁止对 function 的参数进行重新赋值
+      "error",
+      { props: true, ignorePropertyModificationsFor: ["state", "item"] }
+    ],
+    "brace-style": ["error", "1tbs", { allowSingleLine: false }], // 强制在代码块中使用一致的大括号风格
+    camelcase: "off", // 强制使用骆驼拼写法命名约定
+    "@typescript-eslint/no-empty-function": 0, // 空方法
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "max-len": ["error", { code: 160 }], // 强制一行的最大长度
+    "no-unused-vars": 0, // 禁止出现未使用过的变量，需配合下面的规则使用
+    "@typescript-eslint/no-unused-vars": ["error"] // 未使用的变量
+  }
+};
+```
+
+### 第二步 安装 `eslint`,并且将 `eslint-loader` 配置到`webpack.config.js`中
+
+```deep
+{
+  test: /\.js$/,
+  use: [
+    {
+      loader: "eslint-loader",
+      options: {
+        cache: true
+      }
+    }
+  ],
+  include: path.resolve(__dirname, "src"),
+  exclude: /node_modules/
+}
+```
+
+### 第三步 VScode 配置保存代码自动格式化代码
+
+- 根目录新建`.vscode`文件夹
+- 然后在`.vscode`下建立`setttings.json`文件
+
+```deep
+{
+  "editor.tabSize": 2,
+  "eslint.autoFixOnSave": true, // 每次保存的时候将代码按eslint格式进行修复
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true, //让函数(名)和后面的括号之间加个空格
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "html",
+      "autoFix": true
+    },
+    {
+      "language": "vue",
+      "autoFix": true
+    }
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/dist": true
+  },
+  "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
+
+### 第四步 忽略不需要 Eslint 格式化的文件
+
+- 创建`.eslintignore`文件
+- 配置以下不需要格式化的文件/文件夹
+
+```deep
+node_modules/
+dist/
+.babelrc
+.eslintrc.js
+```
+
+## 12-配置 Stylelint 代码检查
+
+### 第一步 安装 `stylelint`,`stylelint-config-standard`
+
+```deep
+cnpm i -D stylelint stylelint-config-standard
+```
+
+### 第二步 创建`.stylelintrc`文件
+
+- 填入以下的内容
+
+```deep
+{
+  // 继承 stylelint-config-standard 中的所有检查规则
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "at-rule-empty-line-before": null
+  }
+}
+```
+
+### 第三步配置 忽略不需要 stylelint 检查的文件
+
+- 创建 `.stylelintignore`
+
+```
+
+```
+
+## 12-配置`.editorconfig` 帮助开发人员在不同的编辑器和 IDE 之间定义和维护一致的编码样式
+
+- 根目录创建`.editorconfig`文件
+
+```
+## https://github.com/editorconfig/editorconfig-vscode
+
+# 告诉EditorConfig插件，这是根文件，不用继续往上查找
+root = true
+
+# 匹配全部文件
+[*]
+# 结尾换行符，可选"lf"、"cr"、"crlf"
+end_of_line = lf
+# 在文件结尾插入新行
+insert_final_newline = true
+# 删除一行中的前后空格
+trim_trailing_whitespace = true
+# 匹配js和py结尾的文件
+[*.{js,py}]
+# 设置字符集
+charset = utf-8
+
+# 匹配py结尾的文件
+[*.py]
+# 缩进风格，可选"space"、"tab"
+indent_style = space
+# 缩进的空格数
+indent_size = 4
+
+# 以下匹配，类同
+[Makefile]
+indent_style = tab
+# tab的宽度
+tab_width = 4
+
+# 以下匹配，类同
+[lib/**.js]
+indent_style = space
+indent_size = 2
+
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+```
