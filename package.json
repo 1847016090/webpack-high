@@ -4,9 +4,8 @@
   "description": "1. [深入浅出 Webpack](http://webpack.wuhaolin.cn/)",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --config webpack.config.js --hot --devtool source-map"
+    "start": "cross-env NODE_ENV=dev webpack-dev-server --config ./config/webpack.dev.js --mode development",
+    "prod": "cross-env NODE_ENV=prod webpack --config ./config/webpack.prod.js --mode production"
   },
   "repository": {
     "type": "git",
@@ -16,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/1847016090/webpack-high/issues"
+    "url": "https://github.com//webpack-high/issues"
   },
   "homepage": "https://github.com/1847016090/webpack-high#readme",
   "devDependencies": {
@@ -33,6 +32,7 @@
     "babel-loader": "^8.2.5",
     "bufferutil": "^4.0.6",
     "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "eslint": "^8.15.0",
     "eslint-loader": "^4.0.2",
@@ -55,6 +55,7 @@
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.8.1",
+    "webpack-merge": "^5.8.0",
     "webpackbar": "^5.0.2"
   },
   "dependencies": {

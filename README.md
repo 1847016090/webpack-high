@@ -674,3 +674,200 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
   ],
 }
 ```
+
+## 14-简单区分本地环境和生产环境
+
+> 本地开发和部署线上，肯定是有不同的需求
+
+### 本地环境
+
+- 需要更快的构建速度
+- 需要打印 debug 信息
+- 需要 live reload 或 hot reload 功能
+- 需要 sourcemap 方便定位问题
+- ...
+
+### 生产环境
+
+- 需要更小的包体积，代码压缩+tree-shaking
+- 需要进行代码分割
+- 需要压缩图片体积
+- ...
+
+### 第一步 安装`cross-env`，`webpack-merge`
+
+- `cross-env`用于配置不同环境对应的参数
+- `webpack-merge` 用于合并 webpack 配置
+
+```deep
+cnpm i -D cross-env
+```
+
+### 第二步 拆分 `webpack.config.js`
+
+- 拆分出公共的 webpack 配置： `webpack.common.js`
+
+```deep
+const path = require("path");
+
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const WebpackBar = require("webpackbar");
+
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+const config = {
+  // 入口文件
+  entry: path.join(__dirname, "..", "src/index.tsx"),
+  output: {
+    // 把所有依赖的模块合并输出到一个 bundle.js 文件
+    filename: "bundle.js",
+    // 输出文件都放到 dist 目录下
+    path: path.resolve(__dirname, "..", "./dist")
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/
+      },
+      {
+        test: /\.js$/, // enforce 默认为 normal 普通 loader
+        use: [
+          "babel-loader",
+          {
+            loader: "eslint-loader",
+            options: {
+              cache: true
+            }
+          }
+        ],
+        include: path.resolve(__dirname, "src"),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(s?)css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|svg|gif)/i,
+        type: "asset",
+        generator: {
+          filename: "img/[hash][ext][query]" // 局部指定输出位置
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024 // 限制于 8kb
+          }
+        }
+      }
+    ]
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js", ".json"],
+    alias: {
+      "@": path.resolve(__dirname, "../src")
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: "index.html",
+      template: "./index.html"
+    }),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: `css/[name]_[contenthash:8].css`
+    }),
+    new WebpackBar()
+  ]
+};
+
+module.exports = config;
+```
+
+#### 大概配置
+
+- 拆分出生产环境的配置`webpack.dev.js`，并且使用 webpack-merge 将公共配置合并到生产环境的配置
+- webpack4.0 配置 devServer -> contentBase
+- webpack5.0 配置 devServer -> static -> directory
+
+#### 配置 public 目的
+
+因为 webpack 在进行打包的时候，对静态文件的处理，例如图片，都是直接 copy 到 dist 目录下面。
+但是对于本地开发来说，这个过程太费时，也没有必要，所以在设置 contentBase 之后，就直接到对应的静态目录下面去读取文件，而不需对文件做任何移动，节省了时间和性能开销
+
+- 在根目录建立 public 文件夹
+- 并且在下面创建 images 文件夹，随意添加一张图片
+- 在 `页面中引入`
+
+```deep
+const { merge } = require("webpack-merge");
+const path = require("path");
+const commonConfig = require("./webpack.common");
+const devConfig = {
+  mode: "development",
+  devServer: {
+    // contentBase: path.resolve(__dirname, "public"), // 静态文件目录
+    static: {
+      directory: path.join(__dirname, "public")
+    },
+    open: true // 是否自动打开浏览器
+  },
+
+  devtool: "eval-source-map"
+};
+
+module.exports = () => {
+  return merge(commonConfig, devConfig);
+};
+
+```
+
+- 拆分出生产环境的配置 `webpack.prod.js`
+
+```deep
+const { merge } = require("webpack-merge");
+
+const commonConfig = require("./webpack.common");
+
+const prodConfig = {
+  mode: "production"
+};
+
+module.exports = () => {
+  return merge(commonConfig, prodConfig);
+};
+
+```
+
+### 第三步 配置`package.json` 文件中的脚本命令
+
+```deep
+{
+  "script": {
+    "start": "cross-env NODE_ENV=dev webpack-dev-server --config ./config/webpack.dev.js --mode development",
+    "prod": "cross-env NODE_ENV=prod webpack --config ./config/webpack.prod.js --mode production"
+  }
+}
+```
+
+### 第四步查看配置的环境变量在配置中的输出
+
+-> `webpack.common.js`中打印
+
+```deep
+console.log(process.env.NODE_ENV) // prod | dev
+
+// 在底部的函数里面打印
+module.exports = (env, argv) => {
+  console.log(argv) // { mode: 'production' }
+}
+```

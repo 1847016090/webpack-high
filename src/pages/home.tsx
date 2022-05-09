@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 const Home = () => {
   const [text, setText] = useState<string>("sdfasdfasfdasfasfa");
+
   useEffect(() => {
     let timer: NodeJS.Timer = setTimeout(() => {
       setText("我的文字改变啦！！！");
@@ -12,10 +13,11 @@ const Home = () => {
       clearTimeout(timer);
     };
   }, []);
+
   return (
     <div>
       {text}
-      <img src={"@/assets/img/feeds.png"} alt="22" />
+      <img src="../image/Load2.gif" alt="22" />
     </div>
   );
 };

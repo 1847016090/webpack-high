@@ -8,18 +8,14 @@ const WebpackBar = require("webpackbar");
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-module.exports = {
-  mode: "development",
+const config = {
   // 入口文件
-  entry: "./src/index.tsx",
-  devServer: {
-    open: true
-  },
+  entry: path.join(__dirname, "..", "src/index.tsx"),
   output: {
     // 把所有依赖的模块合并输出到一个 bundle.js 文件
     filename: "bundle.js",
     // 输出文件都放到 dist 目录下
-    path: path.resolve(__dirname, "./dist")
+    path: path.resolve(__dirname, "..", "./dist")
   },
   module: {
     rules: [
@@ -65,6 +61,12 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js", ".json"],
+    alias: {
+      "@": path.resolve(__dirname, "../src")
+    }
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
@@ -75,12 +77,7 @@ module.exports = {
       filename: `css/[name]_[contenthash:8].css`
     }),
     new WebpackBar()
-  ],
-  resolve: {
-    extensions: [".tsx", ".ts", ".js", ".json"],
-    alias: {
-      "@": path.resolve(__dirname, "./src")
-    }
-  },
-  devtool: "eval-source-map"
+  ]
 };
+
+module.exports = config;
