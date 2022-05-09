@@ -1,10 +1,7 @@
 const { merge } = require("webpack-merge");
 const path = require("path");
 const commonConfig = require("./webpack.common");
-console.log(
-  'path.join(__dirname, "public")',
-  path.join(__dirname, "..", "public")
-);
+
 const devConfig = {
   mode: "development",
   devServer: {
