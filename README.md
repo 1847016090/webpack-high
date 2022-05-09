@@ -630,3 +630,47 @@ indent_style = space
 indent_size = 2
 
 ```
+
+## 13-添加打包进度效果以及打包清除上一次的文件夹
+
+- 安装`webpackbar`添加打包进度效果
+
+### 第一步 安装`webpackbar`
+
+```deep
+cnpm i -D webpackbar
+```
+
+### 配置`webpack.config.js`
+
+```deep
+// 引入
+const WebpackBar = require("webpackbar");
+
+// 配置
+{
+  plugins: [
+    new WebpackBar()
+  ],
+}
+```
+
+### 第二步 安装 `clean-webpack-plugin`
+
+```deep
+cnpm i -D clean-webpack-plugin
+```
+
+### 配置`webpack.config.js`
+
+```deep
+// 引入
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+// 配置
+{
+  plugins: [
+    new CleanWebpackPlugin(),
+  ],
+}
+```

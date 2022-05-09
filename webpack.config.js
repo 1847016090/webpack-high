@@ -4,6 +4,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const WebpackBar = require("webpackbar");
+
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 module.exports = {
   mode: "development",
   // 入口文件
@@ -66,9 +70,11 @@ module.exports = {
       filename: "index.html",
       template: "./index.html"
     }),
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: `css/[name]_[contenthash:8].css`
-    })
+    }),
+    new WebpackBar()
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
