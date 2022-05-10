@@ -60,8 +60,17 @@ const config = {
         }
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: "asset/resource"
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        type: "asset",
+        generator: {
+          // 输出文件位置以及文件名
+          filename: "[name][hash:8][ext]"
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10 * 1024 // 超过100kb不转 base64
+          }
+        }
       }
     ]
   },

@@ -398,6 +398,13 @@ cnpm i @types/react @types/react-dom -D
 - 当图片当于 8kb，会将图片资源拷贝到 dist/img 下面并且以哈希命名
 - 当图片小于 8kb，会将图片转化为 base64 注入到代码里面
 
+资源模块说明：
+
+- `asset/resource` 将资源分割为单独的文件，并导出 url，类似之前的 file-loader 的功能.
+- `asset/inline` 将资源导出为 dataUrl 的形式，类似之前的 url-loader 的小于 limit 参数时功能.
+- `asset/source` 将资源导出为源码（source code）. 类似的 raw-loader 功能.
+- `asset` 会根据文件大小来选择使用哪种类型，当文件小于 8 KB（默认） 的时候会使用 asset/inline，否则会使用 asset/resource
+
 ```deep
 // webpack 5.0不需要使用 url-loader, file-loader, raw-loader，直接使用asset来配置
 // file-loader 和 url-loader作用
@@ -440,9 +447,18 @@ cnpm i @types/react @types/react-dom -D
   modules: {
     rules: [
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: "asset/resource"
-      }
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        type: 'asset',
+        generator: {
+          // 输出文件位置以及文件名
+          filename: "[name][hash:8][ext]"
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10 * 1024 // 超过100kb不转 base64
+          }
+        }
+      },
     ]
   }
 }
