@@ -1027,3 +1027,54 @@ filename: "[name][hash:8][ext]"
 - **hash** ：任何一个文件改动，整个项目的构建 hash 值都会改变；
 - **chunkhash**：文件的改动只会影响其所在 chunk 的 hash 值；
 - **contenthash**：每个文件都有单独的 hash 值，文件的改动只会影响自身的 hash 值；
+
+## 18-使用 resolve 来优化配置
+
+### 1. 设置别名 `alias`
+
+- alias 用的创建 import 或 require 的别名，用来简化模块引用，项目中基本都需要进行配置。
+
+```deep
+// webpack.config.js
+
+{
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "../src")
+    }
+  }
+}
+
+// src/index.tsx引入
+import "@/font/iconfont.css"
+```
+
+### 2. 配置 `extensions`
+
+- 配置文件扩展名，开发者则不需要去手动引入文件扩展名
+
+```deep
+{
+  resolve: {
+    extensions: [".tsx", ".ts", ".js", ".json"],
+  }
+}
+```
+
+**需要注意的是**：
+
+- 高频文件后缀名放前面；
+- 手动配置后，默认配置会被覆盖
+
+### 3. 配置 `modules`
+
+- 告诉 webpack 解析模块时应该搜索的目录
+- 告诉 webpack 优先 src 目录下查找需要解析的文件，会大大节省查找时间
+
+```deep
+{
+  resolve: {
+     modules: [resolve('src'), 'node_modules'],
+  }
+}
+```
