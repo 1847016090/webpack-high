@@ -18,6 +18,8 @@ const Home = () => {
     <div>
       {text}
       <img src="../image/Load2.gif" alt="22" />
+      <div>我是图标：</div>
+      <i className="iconfont icon-yiliao_jingzhui"></i>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 // import "./assets/img/feeds.png";
 import "@/assets/img/feeds.png";
-
+import "@/fonts/iconfont.css";
 import "./testSass.scss";
 const a = 1;
 import Home from "./pages/home";

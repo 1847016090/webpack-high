@@ -420,13 +420,41 @@ cnpm i @types/react @types/react-dom -D
 
 ### 第二步 在`scss`文件中引入背景图片
 
-```
+```deep
 #app {
   background: url(./assets/img/feeds.png);
 }
 ```
 
 ### 执行 `yarn build` 查看浏览器显示的图片路径
+
+### 第三步 引入图标库
+
+- 在阿里云矢量图标库下载图标 [地址](https://www.iconfont.cn/home/index?spm=a313x.7781069.1998910419.2)
+- src 目录下面建立 fonts 文件夹，放入刚刚下载的图标，只使用`iconfont.css`以及`iconfont.ttf`多余的文件删除
+
+### 第四步 配置`webpack.config.js`
+
+```deep
+{
+  modules: {
+    rules: [
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource"
+      }
+    ]
+  }
+}
+```
+
+### 第五步 在 src/home/index.tsx 引入图标
+
+```deep
+<i className="iconfont icon-yiliao_jingzhui"></i>
+```
+
+### 页面显示
 
 ## 12-配置 ESlint 代码检查
 

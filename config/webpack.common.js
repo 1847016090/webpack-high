@@ -58,6 +58,10 @@ const config = {
             maxSize: 8 * 1024 // 限制于 8kb
           }
         }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource"
       }
     ]
   },
