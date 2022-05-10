@@ -977,14 +977,14 @@ function log(text){
 
 - 分析一下关键字
 
-| 关键字    |                                                      描述 |
-| :-------- | --------------------------------------------------------: |
-| inline    |                     代码内通过 dataUrl 形式引入 SourceMap |
-| hidden    |                             生成 SourceMap 文件，但不使用 |
+| 关键字    | 描述                                                      |
+| :-------- | :-------------------------------------------------------- |
+| inline    | 代码内通过 dataUrl 形式引入 SourceMap                     |
+| hidden    | 生成 SourceMap 文件，但不使用                             |
 | eval      | `eval(...)` 形式执行代码，通过 dataUrl 形式引入 SourceMap |
-| nosources |                                          不生成 SourceMap |
-| cheap     |                          只需要定位到行信息，不需要列信息 |
-| module    |                                    展示源代码中的错误位置 |
+| nosources | 不生成 SourceMap                                          |
+| cheap     | 只需要定位到行信息，不需要列信息                          |
+| module    | 展示源代码中的错误位置                                    |
 
 ### 推荐配置
 
@@ -1001,3 +1001,29 @@ function log(text){
 - 推荐：`none`
   理由：
   不需要展示源码
+
+## 17-理解 webpack 中的 hash
+
+> Webpack 文件指纹策略是将文件名后面加上 hash 值。特别在使用 CDN 的时候，缓存是它的特点与优势，但如果打包的文件名，没有 hash 后缀的话，你肯定会被缓存折磨的够呛
+
+举个例子：
+
+```deep
+filename: "[name][hash:8][ext]"
+```
+
+| 关键字      | 描述                       |
+| :---------- | :------------------------- |
+| ext         | 文件后缀名                 |
+| name        | 文件名                     |
+| path        | 文件相对路径               |
+| folder      | 文件所在文件夹             |
+| hash        | 每次构建生成的唯一 hash 值 |
+| chunkhash   | 根据 chunk 生成 hash 值    |
+| contenthash | 根据文件内容生成 hash 值   |
+
+表格里面的 hash、chunkhash、contenthash 你可能还是不清楚差别在哪
+
+- **hash** ：任何一个文件改动，整个项目的构建 hash 值都会改变；
+- **chunkhash**：文件的改动只会影响其所在 chunk 的 hash 值；
+- **contenthash**：每个文件都有单独的 hash 值，文件的改动只会影响自身的 hash 值；
