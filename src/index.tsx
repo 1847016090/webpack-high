@@ -6,16 +6,21 @@ import "@/fonts/iconfont.css";
 import "./testSass.scss";
 const a = 1;
 import Home from "./pages/home";
+import { init } from "./utils";
 
-const App = (): React.ReactElement => {
-  const a: string = "1111111dsafdfsfa111";
-  return (
-    <div>
-      {a}
-      <Home />
-    </div>
-  );
-};
+// @init("hi")
+class App extends React.PureComponent {
+  render() {
+    const a: string = "1111111dsafdfsfa111";
+    console.log("this.props", this.props);
+    return (
+      <div>
+        {a}
+        <Home />
+      </div>
+    );
+  }
+}
 
 const aa =
   "sdafdafdfasfasfsdafsdfasdfsdfasdfasdfasdfasdfasdfasfdasdfasdfasfasdfasaassdafdafdfasfassssdafdafdfasfassdafdafdfasfas";

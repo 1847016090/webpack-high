@@ -7,7 +7,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackBar = require("webpackbar");
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-
+console.log(
+  'path.resolve(__dirname, "../src")',
+  path.resolve(__dirname, "../src")
+);
 const config = {
   // 入口文件
   entry: path.join(__dirname, "..", "src/index.tsx"),

@@ -923,3 +923,38 @@ module.exports = (env, argv) => {
   console.log(argv) // { mode: 'production' }
 }
 ```
+
+## 15-配置装饰器
+
+### 第一步 安装装饰器依赖
+
+```deep
+cnpm i babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties -D
+```
+
+### 第二步 `.babelrc.js`
+
+```deep
+{
+  plugins: [
+    [("@babel/plugin-proposal-decorators", { legacy: true })],
+    ["@babel/plugin-proposal-class-properties", { loose: true }]
+  ]
+}
+```
+
+### 第三步 使用装饰器
+
+- 建立一个类，并且写好装饰器
+
+```deep
+
+//  src/index.tsx
+@log('hi')
+class TestDecorator{}
+
+// 创建log函数
+function log(text){
+  console.log(text)
+}
+```
