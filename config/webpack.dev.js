@@ -12,7 +12,7 @@ const devConfig = {
     open: true // 是否自动打开浏览器
   },
 
-  devtool: "eval-source-map"
+  devtool: "eval-cheap-module-source-map"
 };
 
 module.exports = () => {
