@@ -1,9 +1,12 @@
 # 1 - 基于 深入浅出 Webpack 学习
 
+参考文章：
+
 1. [深入浅出 Webpack](http://webpack.wuhaolin.cn/)
 2. [Webpack5 最佳实践](https://juejin.cn/post/7061165571252944926)
 3. [Webpack 配置核心包的作用](https://juejin.cn/post/6986621723961475103)
 4. [Airbnb 代码风格](https://github.com/airbnb/javascript)
+5. [【万字】透过分析 webpack 面试题，构建 webpack5.x 知识体系](https://juejin.cn/post/7023242274876162084#heading-0)
 
 ## 1. webpack 安装和使用
 
@@ -1075,6 +1078,39 @@ import "@/font/iconfont.css"
 {
   resolve: {
      modules: [resolve('src'), 'node_modules'],
+  }
+}
+```
+
+## 19-使用 include 和 exclude 缩小搜索范围
+
+> 在配置 loader 的时候，我们需要更精确的去指定 loader 的作用目录或者需要排除的目录，通过使用 include 和 exclude 两个配置项，可以实现这个功能，常见的例如：
+
+- include：符合条件的模块进行解析
+- exclude：排除符合条件的模块，不解析
+- exclude 优先级更高
+
+例如：
+
+```deep
+{
+  module: {
+    rules: [
+      {
+        test: /\.js$/, // enforce 默认为 normal 普通 loader
+        use: [
+          "babel-loader",
+          {
+            loader: "eslint-loader",
+            options: {
+              cache: true
+            }
+          }
+        ],
+        include: path.resolve(__dirname, "src"), // 只需编译 src 下面的文件
+        exclude: /node_modules/   // 排除 node_modules 以外的文件
+      },
+    ]
   }
 }
 ```
