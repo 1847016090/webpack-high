@@ -57,6 +57,8 @@ module.exports = {
 
 ### **第一步**安装`style-loader`,`css-loader`
 
+- 将 CSS 动态注入到 style 标签里面
+
 ```deep
 cnpm i -D style-loader css-loader
 ```
@@ -80,6 +82,8 @@ module: {
 ## 3 - 使用 plugin 添加额外的功能
 
 ### **第一步**安装 `mini-css-extract-plugin`和`html-webpack-plugin`
+
+- `mini-css-extract-plugin`， 将 CSS 以 Link 标签的方式引入到页面中
 
 ```deep
 cnpm i -D mini-css-extract-plugin html-webpack-plugin
@@ -394,8 +398,11 @@ cnpm i @types/react @types/react-dom -D
 - 当图片当于 8kb，会将图片资源拷贝到 dist/img 下面并且以哈希命名
 - 当图片小于 8kb，会将图片转化为 base64 注入到代码里面
 
-```
+```deep
 // webpack 5.0不需要使用 url-loader, file-loader, raw-loader，直接使用asset来配置
+// file-loader 和 url-loader作用
+// file-loader: 解决图片引入问题，并将图片 copy 到指定目录，默认为 dist
+// url-loader: 解依赖 file-loader，当图片小于 limit 值的时候，会将图片转为 base64 编码，大于 limit 值的时候依然是使用 file-loader 进行拷贝
 
 {
   test: /\.(jpe?g|png|svg|gif)/i,
