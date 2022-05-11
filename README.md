@@ -1290,3 +1290,30 @@ module.exports = (env, argv) => {
 ```
 
 ### 第四步 执行`yarn build:analyze` 查看生成包的体积
+
+## 23-压缩 CSS
+
+### 第一步 安装 CSS 压缩插件
+
+- **webpack5.0** 使用 `css-minimizer-webpack-plugin` 进行压缩
+- **webpack4.0** 使用 `optimize-css-assets-webpack-plugin` 进行压缩
+
+```deep
+cnpm i -D css-minimizer-webpack-plugin
+```
+
+### 第二步 `webpack.prod.js` 配置优化
+
+```deep
+{
+  optimization: {
+    minimizer: [
+      new CssMinimizerPlugin({
+        include: /\/src/,
+        exclude: /\/node_modules/,
+        parallel: true  // 使用多进程并发执行，提升构建速度
+      })
+    ]
+  }
+}
+```

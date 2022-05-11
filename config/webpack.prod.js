@@ -4,11 +4,25 @@ const { merge } = require("webpack-merge");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
+/**webpack5.0 压缩CSS */
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
 const commonConfig = require("./webpack.common");
 
 /** 生产环境配置 */
 const prodConfig = {
-  mode: "none"
+  mode: "production",
+  optimization: {
+    minimizer: [
+      // 在 webpack@5 中，你可以使用 `...` 语法来扩展现有的 minimizer（即 `terser-webpack-plugin`），将下一行取消注释
+      // `...`,
+      new CssMinimizerPlugin({
+        include: /\/src/,
+        exclude: /\/node_modules/,
+        parallel: true
+      })
+    ]
+  }
 };
 
 /** 打包分析器配置 */
