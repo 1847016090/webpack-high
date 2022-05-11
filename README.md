@@ -1305,6 +1305,11 @@ cnpm i -D css-minimizer-webpack-plugin
 ### 第二步 `webpack.prod.js` 配置优化
 
 ```deep
+// 引入
+/**webpack5.0 压缩CSS */
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
+// 配置
 {
   optimization: {
     minimizer: [
@@ -1312,6 +1317,32 @@ cnpm i -D css-minimizer-webpack-plugin
         include: /\/src/,
         exclude: /\/node_modules/,
         parallel: true  // 使用多进程并发执行，提升构建速度
+      })
+    ]
+  }
+}
+```
+
+## 24-压缩 JS
+
+### 配置 `webpack.prod.js`
+
+- 由于 webpack 5.0 内置了 `terser-webpack-plugin`，那不需要引入
+
+```deep
+// 引入
+/** 压缩JS */
+const terserWebpackPlugin = require("terser-webpack-plugin");
+
+// 配置
+{
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new terserWebpackPlugin({
+        include: /\/src/, // 一定要配置搜索的范围，不然打包时间会很长
+        exclude: /\/node_modules/,
+        parallel: true
       })
     ]
   }
