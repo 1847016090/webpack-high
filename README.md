@@ -1160,3 +1160,82 @@ cnpm i -D thread-loader
 ```
 
 ### 第三步 结果： 效果不大
+
+## 一 配置 babel-loader 缓存
+
+- babel 在转译 js 过程中时间开销比价大，将 babel-loader 的执行结果缓存起来，重新打包的时候，直接读取缓存
+- 缓存位置： node_modules/.cache/babel-loader
+- 结果： 速度有一些提升
+
+```deep
+{
+  modules: {
+    rules: [
+      {
+        loader: "babel-loader",
+        options: {
+          cacheDirectory: true // 启用缓存
+        }
+      },
+    ]
+  }
+}
+```
+
+### 二 使用 cache-loader(cache-loader 好像和 webpack5.0.0 不适配，慎用))))
+
+- 缓存一些性能开销比较大的 loader 的处理结果
+- 缓存位置：node_modules/.cache/cache-loader
+
+```deep
+cnpm i -D cache-loader
+```
+
+**webpack 配置**
+
+- 结果：二次启动后的构建时间有明显缩短
+
+```deep
+{
+  modules: {
+    rules: [
+      {d
+        test: /\.(s?)css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "cache-loader", // 获取前面 loader 转换的结果
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
+        ]
+      },
+    ]
+  }
+}
+```
+
+### 三 使用 cache 持久化缓存
+
+#### webpack 配置
+
+- `__dirname`： 获得当前执行文件所在目录的完整目录名
+- `__filename`： 获得当前执行文件的带有完整绝对路径的文件名
+- `process.cwd()`：获得当前执行 node 命令时候的文件夹目录名
+- `./`： 文件所在目录
+- 编译速度量级提升
+
+```deep
+// 创建缓存路径
+const cacheDirectory = path.resolve(
+  process.cwd(),
+  "./node_modules/.cache/temp_cache"
+);
+
+// 配置 webpack.config.js
+{
+  cache: {
+    type: "filesystem",
+    cacheDirectory: cacheDirectory
+  },
+}
+```

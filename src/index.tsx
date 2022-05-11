@@ -15,7 +15,7 @@ class App extends React.PureComponent {
     console.log("this.props", this.props);
     return (
       <div>
-        {a}
+        {a}ssssssssssssssssssdfasdfadasadsdfasdfasfa
         <Home />
       </div>
     );

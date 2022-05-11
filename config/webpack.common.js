@@ -27,16 +27,16 @@ const config = {
         include: path.resolve(__dirname, "src"),
         exclude: /node_modules/,
         use: [
-          {
-            loader: "thread-loader", // 开启多进程打包
-            options: {
-              worker: 3
-            }
-          },
+          // {
+          //   loader: "thread-loader", // 开启多进程打包
+          //   options: {
+          //     worker: 3
+          //   }
+          // },
           {
             loader: "babel-loader",
             options: {
-              cache: true
+              cacheDirectory: true // 启用缓存
             }
           },
           {
@@ -56,6 +56,7 @@ const config = {
         test: /\.(s?)css$/,
         use: [
           MiniCssExtractPlugin.loader,
+          "cache-loader", // 获取前面 loader 转换的结果
           "css-loader",
           "postcss-loader",
           "sass-loader"
