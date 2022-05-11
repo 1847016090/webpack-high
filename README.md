@@ -1389,3 +1389,22 @@ const cssTreeShakingPath = path.resolve(process.cwd(), "./src");
 
 // 加上插件后，打包后改样式被删除掉了
 ```
+
+## 26-JS 摇树
+
+### 直接在 `.babelrc.js` 中配置
+
+- 在预设里面配置
+
+```deep
+{
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        module: false, // 配置false即可开JS摇树
+      }
+    ],
+  ],
+}
+```
