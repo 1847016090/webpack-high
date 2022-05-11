@@ -1231,7 +1231,7 @@ const cacheDirectory = path.resolve(
   "./node_modules/.cache/temp_cache"
 );
 
-// 配置 webpack.config.js
+// 配置 webpack.dev.js
 {
   cache: {
     type: "filesystem",
@@ -1239,3 +1239,54 @@ const cacheDirectory = path.resolve(
   },
 }
 ```
+
+## 22-构建结果分析打包体积
+
+### 第一步 安装 `webpack-bundle-analyzer` 依赖
+
+```deep
+cnpm i webpack-bundle-analyzer -D
+```
+
+### 第二步 添加 打包命令
+
+- `package.json`中添加打包分析命令
+
+```deep
+{
+  "scripts": {
+    "build:analyze": "cross-env NODE_ENV=analyze webpack --config ./config/webpack.prod.js --mode production"
+  }
+}
+```
+
+### 第三步 配置 `webpack.prod.js`
+
+```deep
+/** 打包分析器配置 */
+const analyzerConfig = {
+  plugins: [
+    // 配置插件
+    new BundleAnalyzerPlugin({
+      // analyzerMode: 'disabled',  // 不启动展示打包报告的http服务器
+      // generateStatsFile: true, // 是否生成stats.json文件
+    })
+  ]
+};
+
+// 根据不同的环境来使用不同的配置
+module.exports = (env, argv) => {
+  switch (process.env.NODE_ENV) {
+    /** 打包分析器 */
+    case "analyze":
+      return merge(commonConfig, prodConfig, analyzerConfig);
+    /** 生产环境配置 */
+    case "prod":
+      return merge(commonConfig, prodConfig);
+    default:
+      return merge(commonConfig, prodConfig);
+  }
+};
+```
+
+### 第四步 执行`yarn build:analyze` 查看生成包的体积
