@@ -1,3 +1,4 @@
+const path = require("path");
 const { merge } = require("webpack-merge");
 
 /** 打包分析器 */
@@ -10,7 +11,16 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 /** 压缩JS */
 const terserWebpackPlugin = require("terser-webpack-plugin");
 
+/** CSS 摇树 */
+const PurgeCssWebpackPlugin = require("purgecss-webpack-plugin");
+
+/** 匹配文件/文件夹路径 */
+const glob = require("glob");
+
 const commonConfig = require("./webpack.common");
+
+/**配置只对src目录进行摇树 */
+const cssTreeShakingPath = path.resolve(process.cwd(), "./src");
 
 /** 生产环境配置 */
 const prodConfig = {
@@ -31,7 +41,12 @@ const prodConfig = {
         parallel: true
       })
     ]
-  }
+  },
+  plugins: [
+    new PurgeCssWebpackPlugin({
+      paths: glob.sync(`${cssTreeShakingPath}/**/*`, { nodir: true })
+    })
+  ]
 };
 
 /** 打包分析器配置 */

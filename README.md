@@ -1348,3 +1348,44 @@ const terserWebpackPlugin = require("terser-webpack-plugin");
   }
 }
 ```
+
+## 25-CSS 摇树
+
+### 第一步 安装 CSS 摇树 插件 `purgecss-webpack-plugin`
+
+```deep
+cnpm i -D purgecss-webpack-plugin
+```
+
+### 第二步 配置`webpack.prod.js`
+
+```deep
+/** CSS 摇树 */
+const PurgeCssWebpackPlugin = require("purgecss-webpack-plugin");
+
+/** 匹配文件/文件夹路径 */
+const glob = require("glob");
+
+/**配置只对src目录进行摇树 */
+const cssTreeShakingPath = path.resolve(process.cwd(), "./src");
+
+// 配置
+{
+  plugins: [
+    new PurgeCssWebpackPlugin({
+      paths: glob.sync(`${cssTreeShakingPath}/**/*`, { nodir: true })
+    })
+  ]
+}
+```
+
+### 第三步 测试
+
+```deep
+// 在testScss.scss文件中添加无用的样式
+.unused {
+  background: red;
+}
+
+// 加上插件后，打包后改样式被删除掉了
+```
