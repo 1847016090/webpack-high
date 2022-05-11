@@ -23,22 +23,33 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/
-      },
-      {
         test: /\.js$/, // enforce 默认为 normal 普通 loader
+        include: path.resolve(__dirname, "src"),
+        exclude: /node_modules/,
         use: [
-          "babel-loader",
+          {
+            loader: "thread-loader", // 开启多进程打包
+            options: {
+              worker: 3
+            }
+          },
+          {
+            loader: "babel-loader",
+            options: {
+              cache: true
+            }
+          },
           {
             loader: "eslint-loader",
             options: {
               cache: true
             }
           }
-        ],
-        include: path.resolve(__dirname, "src"),
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
         exclude: /node_modules/
       },
       {

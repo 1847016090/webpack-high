@@ -1114,3 +1114,49 @@ import "@/font/iconfont.css"
   }
 }
 ```
+
+## 20-使用 thread-loader 并行编译(效果不大，甚至更慢)
+
+### 第一步 安装`thread-loader`
+
+```deep
+cnpm i -D thread-loader
+```
+
+### 第二步 配置 webpack.config.js
+
+- 使用时，需将此 loader 放置在其他 loader 之前。放置在此 loader 之后的 loader 会在一个独立的 worker 池中运行。
+
+```deep
+{
+  modules: {
+    rules: [
+      {
+        test: /\.js$/, // enforce 默认为 normal 普通 loader
+        use: [
+          {
+            loader: "thread-loader", // 开启多进程打包
+            options: {
+              worker: 3
+            }
+          },
+          {
+            loader: "babel-loader",
+            options: {
+              cache: true
+            }
+          },
+          {
+            loader: "eslint-loader",
+            options: {
+              cache: true
+            }
+          }
+        ]
+      },
+    ]
+  }
+}
+```
+
+### 第三步 结果： 效果不大
