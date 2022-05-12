@@ -92,7 +92,8 @@ const config = {
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
     alias: {
-      "@": path.resolve(__dirname, "../src")
+      "@": path.resolve(__dirname, "../src"),
+      "@rapper": path.resolve(__dirname, "../src/rapper")
     },
     modules: [path.resolve(__dirname, "../src"), "node_modules"]
   },

@@ -1,9 +1,12 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 
+// import { fetch } from "@/rapper";
+
 const Home = () => {
   const [text, setText] = useState<string>("sdfasdfasfdasfasfa");
   useEffect(() => {
+    // getuser();
     let timer: NodeJS.Timer = setTimeout(() => {
       setText("我的文字改变啦！！！");
     }, 500);
@@ -12,7 +15,10 @@ const Home = () => {
       clearTimeout(timer);
     };
   }, []);
-
+  // const getuser = async () => {
+  //   const res = await fetch["GET/getUserList"]();
+  //   console.log("res", res);
+  // };
   return (
     <div>
       {text}

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=dev webpack-dev-server --config ./config/webpack.dev.js --mode development",
     "build": "cross-env NODE_ENV=prod webpack --config ./config/webpack.prod.js --mode production",
-    "build:analyze": "cross-env NODE_ENV=analyze webpack --config ./config/webpack.prod.js --mode production"
+    "build:analyze": "cross-env NODE_ENV=analyze webpack --config ./config/webpack.prod.js --mode production",
+    "rapper": "rapper --type normal --rapperPath \"src/rapper\" --apiUrl \"http://rap2api.taobao.org/repository/get?id=302382&token=efprVcWZSc4tnvUtcwi-lAgucRpWk1Y5\" --rapUrl \"http://rap2.taobao.org\""
   },
   "repository": {
     "type": "git",
@@ -70,6 +71,8 @@
   "dependencies": {
     "@babel/runtime": "^7.17.9",
     "eslint": "^8.14.0",
-    "eslint-loader": "^4.0.2"
+    "eslint-loader": "^4.0.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   }
 }
